@@ -1,24 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import useCurrentLocation from "./hooks/useCurrentLocation";
+import useWatchLocation from "./hooks/useWatchLocation";
+import { geolocationOptions } from "./constants/geolocationOptions";
+import Location from "./components/Location";
 
 function App() {
+  const { location: currentLocation, error: currentError } = useCurrentLocation(geolocationOptions);
+  const { location, cancelLocationWatch, error } = useWatchLocation(geolocationOptions);
+  const [isWatchinForLocation, setIsWatchForLocation] = useState(true);
+
+  useEffect(() => {
+    if (!location) return;
+
+    // Cancel location watch after 3sec
+    setTimeout(() => {
+      cancelLocationWatch();
+      setIsWatchForLocation(false);
+    }, 3000);
+  }, [location, cancelLocationWatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="appContainer">
+      <header>
+        <h1>HTML Geolocation API with React Hooks</h1>
       </header>
+      <p>Current position:</p>
+      <Location location={currentLocation} error={currentError} />
+
+      <p>Watch position: (Status: {isWatchinForLocation.toString()})</p>
+      <Location location={location} error={error} />
     </div>
   );
 }
