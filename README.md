@@ -5,7 +5,7 @@ This project contains 2 different approach to provide user's location through th
 1. Using the current location with `useCurrentLocation` hook
 2. Watching for the user's location changes with `useWatchLocation` hook
 
-The app just calls these hooks when it mounts into the browser and if the users provide the permissions then it will find the their location asynchronously. It will pass the results into the `Location` component to show the coords or the a message in case of error.
+The app just calls these hooks when it mounts into the DOM and if the users provide the permissions then it will find their location. It will pass the results into the `Location` component to show the coords or the a message in case of errors.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
