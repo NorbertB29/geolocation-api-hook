@@ -25,8 +25,10 @@ const useWatchLocation = (options = {}) => {
 
   // Clears the watch instance based on the saved watch id
   const cancelLocationWatch = () => {
-    if (locationWatchId.current) {
-      navigator.geolocation.clearWatch(locationWatchId.current);
+    const { geolocation } = navigator;
+
+    if (locationWatchId.current && geolocation) {
+      geolocation.clearWatch(locationWatchId.current);
     }
   };
 
@@ -40,11 +42,7 @@ const useWatchLocation = (options = {}) => {
     }
 
     // Start to watch the location with the Geolocation API
-    locationWatchId.current = navigator.geolocation.watchPosition(
-      handleSuccess,
-      handleError,
-      options
-    );
+    locationWatchId.current = geolocation.watchPosition(handleSuccess, handleError, options);
 
     // Clear the location watch instance when React unmounts the used component
     return cancelLocationWatch;
